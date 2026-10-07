@@ -1,10 +1,9 @@
 /* Trophée Pernin — cache minimal : l'appli s'ouvre même sans réseau.
    Les données, elles, sont gérées par Firebase (cache hors ligne inclus). */
-const CACHE = "trophee-pernin-v22";
+const CACHE = "trophee-pernin-v23";
 const SHELL = [
   "./", "./index.html", "./config.js", "./manifest.webmanifest",
-  "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png", "./icons/icon.svg",
-  "./icons/madag.png", "./icons/madag-sombre.png"
+  "./icons/icon-192.png", "./icons/icon-512.png", "./icons/apple-touch-icon.png", "./icons/icon.svg"
 ];
 
 self.addEventListener("install", e => {
