@@ -560,6 +560,26 @@ button.chip.btnlike:hover{border-color:var(--brass); filter:brightness(1.03)}
 .cagbig small{font-size:1.1rem; font-weight:700}
 .cagright{margin-left:auto; text-align:right}
 .cagnext{font-size:.78rem; color:var(--brass)}
+
+/* Le porte-monnaie peut passer sous zéro : c'est une avance sur le prochain
+   trophée, pas une anomalie. On le montre en rouge pour qu'on le voie, et on
+   écrit toujours ce que ça veut dire juste à côté. */
+.cagsum.avance{background:var(--dang-bg); border-color:var(--dang-line)}
+.cagsum.avance .cagbig, .cagsum.avance .cagnext{color:var(--dang)}
+.cag-note-avance{font-size:.78rem; color:var(--dang); margin:6px 0 0; line-height:1.4}
+.chip.brass.avance{background:var(--dang-bg); border-color:var(--dang-line); color:var(--dang)}
+.card .chip.brass.avance{background:var(--dang-bg)}
+.cag-avance-carte{font-size:.72rem; color:var(--dang); padding:6px 18px 0; line-height:1.35}
+.cagconfirm{
+  margin-top:12px; padding:12px 14px; border-radius:var(--r-s);
+  background:var(--dang-bg); border:1px solid var(--dang-line); color:var(--dang);
+  font-size:.85rem; line-height:1.5;
+}
+.meet-avance{
+  margin:0 0 12px; padding:10px 13px; border-radius:var(--r-s);
+  background:var(--dang-bg); border:1px solid var(--dang-line); color:var(--dang);
+  font-size:.85rem; line-height:1.5;
+}
 .cagform{margin-top:16px; padding:16px; border-radius:var(--r-m); background:var(--surface-2); border:1px solid var(--line)}
 .amtrow{display:flex; align-items:center; gap:10px}
 .amtrow .input{max-width:140px; font-size:1.15rem; font-weight:500}
@@ -1030,6 +1050,11 @@ function nomCagnotte(){ return (S && S.uniteNom) || "Cagnotte"; }
 function fMontant(n){ return n + " " + U(); }
 function fEur(n){ return (n < 0 ? "−" : "") + Math.abs(n) + " " + U(); }
 function titreApp(){ return (S && S.famille) ? "Trophée " + S.famille : "Trophée"; }
+
+/* Une réserve sous zéro se dit « avance » : l'enfant a déjà dépensé ce qu'il
+   n'a pas encore gagné, et son prochain trophée viendra l'effacer d'autant. */
+function estAvance(n){ return n < 0; }
+function fAvance(n){ return fMontant(Math.abs(n)); }
 
 /* ====================== FUSION / CHARGEMENT ====================== */
 function mergeById(A, B){
@@ -2887,9 +2912,15 @@ function openCagnotte(childId, form){
        ' de plus par palier de ' + S.palier + ' points) et par les ajouts exceptionnels.</p></header>';
   h += '<div class="content">';
 
-  h += '<div class="cagsum"><div><div class="eyebrow">Solde du porte-monnaie</div>' +
-       '<div class="cagbig mono">' + solde + ' <small>' + esc(U()) + '</small></div></div>' +
+  var avance = estAvance(solde);
+  h += '<div class="cagsum' + (avance ? " avance" : "") + '"><div>' +
+       '<div class="eyebrow">' + (avance ? "Avance en cours" : "Solde du porte-monnaie") + '</div>' +
+       '<div class="cagbig mono">' + (avance ? "−" : "") + Math.abs(solde) + ' <small>' + esc(U()) + '</small></div></div>' +
        '<div class="cagright"><div class="cagnext">' + log.length + ' mouvement' + (log.length > 1 ? "s" : "") + '</div></div></div>';
+  if(avance){
+    h += '<p class="cag-note-avance">' + esc(c.name) + ' a dépensé ' + fAvance(solde) +
+         ' de plus que sa réserve. C\'est une avance : son prochain trophée viendra l\'effacer d\'autant.</p>';
+  }
 
   if(readOnly){
     h += '<p style="font-size:.85rem;color:var(--ink-3);margin:12px 0 0">Consultation seule : le porte-monnaie se modifie depuis un compte parent.</p>';
@@ -2905,7 +2936,7 @@ function openCagnotte(childId, form){
          '<div class="eyebrow">' + (isAdd ? "Ajout exceptionnel" : "Achat à déduire") + '</div>' +
          '<div class="field"><label for="cag-n">Montant en euros</label>' +
          '<div class="amtrow"><input class="input mono" type="number" id="cag-n" min="1" step="1" value="' +
-         (isAdd ? 5 : Math.max(1, Math.min(5, solde || 1))) + '" data-autofocus>' +
+         (isAdd ? 5 : (solde > 0 ? Math.max(1, Math.min(5, solde)) : 5)) + '" data-autofocus>' +
          '<span class="amtunit" id="cag-eq">' + esc(U()) + '</span></div>' +
          (isAdd ? "" : '<div class="aide" id="cag-warn"></div>') + '</div>' +
          '<div class="field"><label for="cag-note">' + (isAdd ? "Pour quelle raison ?" : "Pour quel achat ?") + '</label>' +
@@ -2927,7 +2958,7 @@ function openCagnotte(childId, form){
       h += '<div class="cagrow"><div class="delta ' + (l.delta >= 0 ? "p" : "m") + '">' + sgn(l.delta) + "</div>" +
            '<div class="cagbody"><div class="cagnote">' + esc(l.note) + "</div>" +
            '<div class="when">' + cagKindLabel(l) + " · " + fWhen(l.at) + parName(l.by) + "</div></div>" +
-           '<div class="cagsolde mono" title="Solde après ce mouvement">' + fMontant(running) + "</div>" +
+           '<div class="cagsolde mono" title="Solde après ce mouvement">' + fEur(running) + "</div>" +
            '<button class="undo" data-cagdel="' + l.id + '">suppr.</button></div>';
       running -= l.delta;
     });
@@ -2954,21 +2985,59 @@ function openCagnotte(childId, form){
     if(form){
       var isAdd = form === "add";
       var nEl = root.querySelector("#cag-n"), eq = root.querySelector("#cag-eq"), warn = root.querySelector("#cag-warn");
+      // Dépasser la réserve n'est plus une erreur : on annonce simplement où
+      // le solde va atterrir, et le bouton demandera une confirmation.
+      function apresRetrait(n){ return solde - n; }
       function sync(){
         var n = parseInt(nEl.value, 10) || 0;
         eq.textContent = U();
-        if(warn) warn.textContent = (n > solde) ? "La réserve ne contient que " + fMontant(solde) + "." : "";
+        if(!warn) return;
+        var apres = apresRetrait(n);
+        warn.textContent = (n > 0 && apres < 0)
+          ? "Après ce retrait, la réserve sera à −" + fAvance(apres) + " : une avance sur le prochain trophée."
+          : "";
       }
       nEl.oninput = sync; sync();
       var note = root.querySelector("#cag-note");
       root.querySelectorAll(".preset").forEach(function(pb){ pb.onclick = function(){ note.value = pb.textContent; note.focus(); }; });
       root.querySelector("#cag-back").onclick = function(){ openCagnotte(childId); };
-      root.querySelector("#cag-ok").onclick = function(){
+      // Un retrait qui met la réserve dans le rouge se fait en deux temps : le
+      // premier appui explique où l'on va, le second valide. C'est ce qui
+      // arrête un 100 tapé à la place d'un 10, sans rien interdire.
+      var confirme = false;
+      var btnOk = root.querySelector("#cag-ok");
+      var boite = null;
+      function annulerConfirmation(){
+        confirme = false;
+        if(boite){ boite.remove(); boite = null; }
+        btnOk.textContent = isAdd ? "Ajouter à la réserve" : "Retirer de la réserve";
+      }
+      nEl.addEventListener("input", annulerConfirmation);
+
+      btnOk.onclick = function(){
         var n = parseInt(nEl.value, 10);
         if(!(n > 0)){ nEl.focus(); nEl.style.borderColor = "var(--dang)"; return; }
-        if(!isAdd && n > solde){ nEl.focus(); nEl.style.borderColor = "var(--dang)"; return; }
         var txt = note.value.trim();
         if(txt.length < 2){ note.focus(); note.style.borderColor = "var(--dang)"; return; }
+
+        var apres = solde - n;
+        if(!isAdd && apres < 0 && !confirme){
+          confirme = true;
+          if(!boite){
+            boite = document.createElement("div");
+            boite.className = "cagconfirm";
+            btnOk.parentNode.parentNode.insertBefore(boite, btnOk.parentNode);
+          }
+          boite.innerHTML = (solde >= 0
+            ? "<b>" + esc(c.name) + " n'a que " + fMontant(solde) + ".</b> Ce retrait de " + fMontant(n) +
+              " mettra sa réserve à <b>−" + fAvance(apres) + "</b>, une avance sur son prochain trophée."
+            : "<b>La réserve de " + esc(c.name) + " est déjà à −" + fAvance(solde) + ".</b> Ce retrait de " +
+              fMontant(n) + " portera l'avance à <b>−" + fAvance(apres) + "</b>.");
+          btnOk.textContent = "Confirmer l'avance";
+          btnOk.focus();
+          return;
+        }
+
         var d = root.querySelector("#cag-date").value || todayISO();
         var at = (d === todayISO()) ? nowISO() : d + "T20:00:00.000Z";
         S.cagnotteLog.push({ id: uid(), child: childId, delta: isAdd ? n : -n, note: txt, at: at,
@@ -2976,7 +3045,9 @@ function openCagnotte(childId, form){
                              by: meEmail(), deleted: false });
         persistLocal(); queueSave(); render();
         openCagnotte(childId);
-        toast(c.name + " : " + (isAdd ? "+" : "−") + fMontant(n) + " — " + nomCagnotte().toLowerCase());
+        var nouveau = solde + (isAdd ? n : -n);
+        toast(c.name + " : " + (isAdd ? "+" : "−") + fMontant(n) + " — " +
+              (estAvance(nouveau) ? "avance de " + fAvance(nouveau) : nomCagnotte().toLowerCase()));
       };
     }
   });
@@ -3200,8 +3271,14 @@ function cardHTML(c){
   h += "</div>";
   h += '<div class="divider" style="margin:16px 18px 0"><span>' + esc(nomCagnotte()) + '</span></div>';
   h += '<div class="sub" style="padding-top:9px">' +
-       '<button class="chip brass btnlike" data-cag="' + c.id + '"><span aria-hidden="true">👛</span><b>' + esc(nomCagnotte()) + '</b>' +
-       '<span class="r">' + fMontant(cg) + '</span><span class="arrow">›</span></button></div>';
+       '<button class="chip brass btnlike' + (estAvance(cg) ? " avance" : "") + '" data-cag="' + c.id + '">' +
+       '<span aria-hidden="true">' + (estAvance(cg) ? "⏳" : "👛") + '</span><b>' +
+       esc(estAvance(cg) ? "Avance" : nomCagnotte()) + '</b>' +
+       '<span class="r">' + (estAvance(cg) ? "−" + fAvance(cg) : fMontant(cg)) + '</span>' +
+       '<span class="arrow">›</span></button></div>';
+  if(estAvance(cg)){
+    h += '<p class="cag-avance-carte">Déjà dépensé sur le prochain trophée.</p>';
+  }
   if(!readOnly){
     h += '<div class="actions">' +
          '<button class="bigbtn btn-minus" data-act="minus" data-id="' + c.id + '"><span>−</span> Bêtise</button>' +
@@ -3589,13 +3666,27 @@ function viewMeeting(){
     }
 
     if(n > 0){
-      h += '<div class="choicebox"><div class="eyebrow">Choix de ' + esc(c.name) + '</div>' +
-           '<div class="choices">' +
+      var cagAct = cagnotteOf(c.id);
+      var gain = euroValue(tot);
+      h += '<div class="choicebox"><div class="eyebrow">Choix de ' + esc(c.name) + '</div>';
+      if(estAvance(cagAct)){
+        var apresGain = cagAct + gain;
+        h += '<p class="meet-avance"><b>' + esc(c.name) + ' a une avance de ' + fAvance(cagAct) + '.</b> ' +
+             (apresGain >= 0
+               ? "S'il met ses " + fMontant(gain) + " à la réserve, l'avance est effacée" +
+                 (apresGain > 0 ? " et il lui reste " + fMontant(apresGain) + "." : ".")
+               : "S'il met ses " + fMontant(gain) + " à la réserve, il descend à −" + fAvance(apresGain) + ".") +
+             " Le cadeau reste possible : l'avance attendra la semaine suivante.</p>";
+      }
+      h += '<div class="choices">' +
            '<button class="choice" data-choice="trophee" data-id="' + c.id + '" aria-pressed="' + (ch.mode === "trophee") + '">' +
            "<b>🎁 Un cadeau</b><small>Un cadeau ou une babiole, à hauteur de " + fMontant(euroValue(tot)) + ", tout de suite.</small></button>" +
            '<button class="choice" data-choice="cagnotte" data-id="' + c.id + '" aria-pressed="' + (ch.mode === "cagnotte") + '">' +
-           "<b>👛 " + fMontant(euroValue(tot)) + " — " + esc(nomCagnotte().toLowerCase()) + "</b><small>Ajoutés à sa réserve (" +
-           fMontant(cagnotteOf(c.id)) + " aujourd'hui) pour viser plus gros.</small></button>" +
+           "<b>👛 " + fMontant(euroValue(tot)) + " — " + esc(nomCagnotte().toLowerCase()) + "</b><small>" +
+           (estAvance(cagAct)
+             ? "Vont d'abord effacer son avance de " + fAvance(cagAct) + "."
+             : "Ajoutés à sa réserve (" + fMontant(cagAct) + " aujourd'hui) pour viser plus gros.") +
+           "</small></button>" +
            "</div>";
       if(ch.mode === "trophee"){
         h += '<div class="field"><label for="gift-' + c.id + '">Cadeau choisi (facultatif)</label>' +
@@ -3721,7 +3812,10 @@ function viewHistory(){
     h += '<section class="section" style="margin-top:0"><h2>' + esc(c.name) + '</h2>' +
          '<p class="lead">' + (ageOf(c.birth) != null ? ageOf(c.birth) + " ans · né le " + fDateFull(c.birth) : "") + "</p>";
     h += '<div class="panel" style="padding:16px 18px; margin-bottom:16px">' +
-         '<div class="btnrow"><div class="chip brass" style="flex:1"><span aria-hidden="true">👛</span><b>' + esc(nomCagnotte()) + '</b><span class="r">' + fMontant(cg) + "</span></div>" +
+         '<div class="btnrow"><div class="chip brass' + (estAvance(cg) ? " avance" : "") + '" style="flex:1">' +
+         '<span aria-hidden="true">' + (estAvance(cg) ? "⏳" : "👛") + '</span><b>' +
+         esc(estAvance(cg) ? "Avance sur le prochain trophée" : nomCagnotte()) + '</b>' +
+         '<span class="r">' + (estAvance(cg) ? "−" + fAvance(cg) : fMontant(cg)) + "</span></div>" +
          '<button class="btn" data-cag="' + c.id + '">Ouvrir</button></div></div>';
 
     var sanc = S.sanctions.filter(function(s){ return !s.deleted && s.child === c.id; }).sort(function(a,b){ return a.start < b.start ? 1 : -1; });
