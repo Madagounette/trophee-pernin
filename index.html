@@ -142,34 +142,6 @@ button{cursor:pointer; border:none; background:none}
 .majbtn .tourne{display:inline-block; animation:tourner .9s linear infinite}
 @keyframes tourner{to{transform:rotate(360deg)}}
 
-/* --- Le bilan du jour, une carte que l'on fait défiler --- */
-.jourbloc{margin:14px 0 4px; touch-action:pan-y}
-.jour-nav{display:flex; align-items:center; gap:10px; margin:0 0 8px}
-.jour-nav .jour-titre{flex:1; text-align:center; min-width:0}
-.jour-nav .jour-titre b{font-family:var(--display); font-size:1rem; display:block}
-.jour-fl{
-  flex:none; width:38px; height:38px; border-radius:50%; cursor:pointer;
-  background:var(--surface); border:1px solid var(--line); color:var(--ink);
-  font-size:1.15rem; line-height:1; display:grid; place-items:center;
-}
-.jour-fl:hover{border-color:var(--line-2)}
-.jour-fl[disabled]{opacity:.3; cursor:default}
-.jour-carte{
-  background:var(--surface-2); border:1px solid var(--line); border-radius:var(--r-m);
-  padding:14px 16px; min-height:96px;
-}
-.jour-solde{font-family:var(--display); font-size:1.6rem; line-height:1.1}
-.jour-solde.p{color:var(--pos)} .jour-solde.m{color:var(--dang)} .jour-solde.z{color:var(--ink-3)}
-.jour-lignes{list-style:none; margin:10px 0 0; padding:0; display:grid; gap:7px}
-.jour-lignes li{display:flex; gap:9px; align-items:baseline; font-size:.9rem}
-.jour-lignes b{font-family:var(--display); flex:none; width:26px}
-.jour-lignes .p b{color:var(--pos)} .jour-lignes .m b{color:var(--dang)}
-.jour-lignes .par{color:var(--ink-3); font-size:.8rem}
-.jour-rien{color:var(--ink-3); font-size:.9rem; margin:8px 0 0}
-.jour-pts{display:flex; justify-content:center; gap:6px; margin:10px 0 0}
-.jour-pts i{width:6px; height:6px; border-radius:50%; background:var(--line-2); display:block}
-.jour-pts i.on{background:var(--ink-3); transform:scale(1.35)}
-.jour-aide{font-size:.74rem; color:var(--ink-3); text-align:center; margin:8px 0 0}
 .status{
   display:flex; align-items:center; gap:8px; font-size:.76rem; color:var(--ink-3);
   white-space:nowrap; padding:7px 14px; border-radius:999px;
@@ -357,6 +329,48 @@ main{padding:18px 0 8px}
 .bigbtn:active{transform:scale(.97)}
 .btn-plus{background:var(--pos-bg); color:var(--pos); border-color:var(--pos-line)}
 .btn-minus{background:var(--dang-bg); color:var(--dang); border-color:var(--dang-line)}
+/* La grosse bêtise : un bouton étroit, à part, qu'on ne touche pas par mégarde. */
+.btn-grosse{
+  flex:0 0 52px; font-family:var(--display); font-size:1.5rem; font-weight:800; line-height:1;
+  background:var(--dang); color:#fff; border-color:var(--dang);
+}
+.btn-grosse:hover{filter:brightness(1.08)}
+.chip.raye{background:var(--dang-bg); border-color:var(--dang-line); color:var(--dang); align-items:flex-start}
+.chip.raye i{font-style:normal; opacity:.85}
+.chip.rachete{background:var(--pos-bg); border-color:var(--pos-line); color:var(--pos); align-items:flex-start}
+
+/* Le tableau de la réunion : les bonnes actions d'un côté, les bêtises de l'autre. */
+.bilan2{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0 4px; align-items:start}
+.bil-col{border:1px solid var(--line); border-radius:var(--r-m); overflow:hidden; min-width:0; background:var(--surface-2)}
+.bil-col.p{background:var(--pos-bg); border-color:var(--pos-line)}
+.bil-col.m{background:var(--dang-bg); border-color:var(--dang-line)}
+.bil-tete{display:flex; align-items:baseline; gap:8px; padding:9px 11px;
+          border-bottom:1px solid color-mix(in srgb, currentColor 22%, transparent)}
+.bil-tete span{font-size:.66rem; text-transform:uppercase; letter-spacing:.07em; font-weight:700}
+.bil-tete b{margin-left:auto; font-family:var(--display); font-size:1.2rem; line-height:1}
+.bil-col.p .bil-tete{color:var(--pos)}
+.bil-col.m .bil-tete{color:var(--dang)}
+.bil-liste{list-style:none; margin:0; padding:0}
+.bil-liste li{padding:7px 11px; font-size:.8rem; line-height:1.35;
+              border-top:1px solid color-mix(in srgb, var(--ink-3) 18%, transparent)}
+.bil-liste li:first-child{border-top:0}
+.bil-j{display:block; font-size:.66rem; color:var(--ink-3); font-variant-numeric:tabular-nums; margin-bottom:1px}
+.bil-qui{color:var(--ink-3)}
+.bil-liste li.grosse{font-weight:700; color:var(--dang)}
+.bil-vide{padding:16px 11px; font-size:.78rem; color:var(--ink-3); text-align:center}
+@media (max-width:330px){ .bilan2{grid-template-columns:1fr} }
+
+/* L'encart de la réunion quand l'enfant est hors course. */
+.meet-raye{
+  margin:0 0 12px; padding:11px 13px; border-radius:var(--r-s);
+  background:var(--dang-bg); border:1px solid var(--dang-line); color:var(--dang);
+  font-size:.86rem; line-height:1.5;
+}
+.meet-rachete{
+  margin:0 0 12px; padding:11px 13px; border-radius:var(--r-s);
+  background:var(--pos-bg); border:1px solid var(--pos-line); color:var(--pos);
+  font-size:.86rem; line-height:1.5;
+}
 .bigbtn span{font-family:var(--display); font-size:1.5rem; line-height:1; font-weight:800}
 .linkbtn{
   width:100%; padding:11px; font-size:.83rem; font-weight:600; color:var(--ink-2);
@@ -798,6 +812,7 @@ var DEFAULTS = {
   thresholds: { warn:-3, punish:-5 },
   palier: 5,
   palierValue: 5,
+  rachat: 10,          // points à atteindre pour effacer une grosse bêtise
   presets: {
     good: ["A rangé sa chambre","A aidé sans qu'on demande","Devoirs faits tout seul","Gentil avec son frère",
            "A débarrassé la table","S'est levé du premier coup","A dit merci / pardon","A prêté sans râler"],
@@ -1014,7 +1029,36 @@ function zoneOf(n){
   if(n > 0) return "good";
   return "none";
 }
-function verdictLabel(n){
+/* ====================== LA GROSSE BÊTISE ======================
+   Elle ne retire aucun point : ce n'est pas une affaire de comptage, c'est une
+   mise hors-jeu. L'enfant est rayé du trophée pour la semaine — mais il peut se
+   racheter en atteignant le seuil de rachat avant la réunion. Sans cette porte
+   de sortie, la semaine serait pliée dès le mardi et plus rien n'inciterait à
+   bien faire. */
+function seuilRachat(){ return (S && S.rachat) || 10; }
+
+function grosseDeLaSemaine(childId){
+  var l = eventsOfWeek(S.weekStart, childId).filter(function(e){ return e.kind === "grosse"; });
+  return l.length ? l[l.length - 1] : null;   // la plus ancienne de la semaine
+}
+/* Vrai quand l'enfant est hors course : une grosse bêtise, et pas encore rachetée. */
+function estRaye(childId){
+  if(!grosseDeLaSemaine(childId)) return false;
+  return scoreOf(childId) < seuilRachat();
+}
+/* Vrai quand il avait une grosse bêtise et qu'il s'en est sorti. */
+function estRachete(childId){
+  return !!grosseDeLaSemaine(childId) && scoreOf(childId) >= seuilRachat();
+}
+function pointsPourRachat(childId){
+  return Math.max(0, seuilRachat() - scoreOf(childId));
+}
+
+function verdictLabel(n, childId){
+  if(childId && estRaye(childId))
+    return { cls:"v-bad", txt:"Rayé du trophée", icon:"❗" };
+  if(childId && estRachete(childId))
+    return { cls:"v-good", txt:"Racheté — trophée retrouvé", icon:"🏆" };
   var z = zoneOf(n);
   if(z === "good") return { cls:"v-good", txt:"Trophée en vue", icon:"🏆" };  // cadeau ou argent, au choix
   if(z === "bad")  return { cls:"v-bad",  txt:"Zone rouge — sanction", icon:"⛔" };
@@ -1099,6 +1143,7 @@ function migrate(s){
   if(!s.thresholds) s.thresholds = d.thresholds;
   if(!s.palier) s.palier = d.palier;
   if(!s.palierValue) s.palierValue = d.palierValue;
+  if(typeof s.rachat !== "number" || s.rachat < 1) s.rachat = d.rachat;
   if(typeof s.pin !== "string") s.pin = d.pin;
   if(typeof s.famille !== "string" || !s.famille) s.famille = FAMILLE_DEFAUT;
   if(typeof s.unite !== "string" || !s.unite) s.unite = d.unite;
@@ -1141,7 +1186,7 @@ function settingsOf(s){
   return { v:s.v, rev:s.rev || 0, pin:s.pin, pinEnabled:s.pinEnabled, parentNames:s.parentNames,
            famille:s.famille, unite:s.unite, uniteNom:s.uniteNom, cadeauPossible:s.cadeauPossible,
            axes:s.axes, doubleSiAxe:s.doubleSiAxe, children:s.children, presets:s.presets, thresholds:s.thresholds,
-           palier:s.palier, palierValue:s.palierValue, weekStart:s.weekStart,
+           palier:s.palier, palierValue:s.palierValue, rachat:s.rachat, weekStart:s.weekStart,
            draft:s.draft || null, updatedAt:s.updatedAt || null };
 }
 
@@ -2803,18 +2848,70 @@ async function addPoint(childId, delta){
   );
 }
 
+/* La grosse bêtise se saisit comme un point, mais sans valeur : delta 0. Elle
+   vit dans la même liste que les autres lignes — donc même synchronisation,
+   même suppression, même historique — et se reconnaît à son kind. */
+async function addGrosse(childId){
+  var ok = await requirePin("Le code parent est demandé pour une grosse bêtise.", true);
+  if(!ok) return;
+  var c = child(childId);
+  if(grosseDeLaSemaine(childId)){
+    toast(c.name + " est déjà rayé du trophée cette semaine.");
+    return;
+  }
+  openModal(
+    '<header><h3><span aria-hidden="true">❗</span> Grosse bêtise — ' + esc(c.name) + '</h3>' +
+    '<p>Celle-ci raye ' + esc(c.name) + ' du trophée pour la semaine. Elle ne retire aucun point : ' +
+    'il pourra se racheter en atteignant <b>+' + seuilRachat() + '</b> avant la réunion.</p></header>' +
+    '<div class="content">' +
+      '<div class="field"><label for="gnote">Que s\'est-il passé ?</label>' +
+      '<textarea class="input" id="gnote" data-autofocus placeholder="Ex : a menti puis recommencé après l\'avertissement"></textarea></div>' +
+      '<div class="field"><label for="gwhen">Quand ?</label>' +
+      '<input class="input" type="date" id="gwhen" value="' + todayISO() + '" max="' + todayISO() + '"></div>' +
+      '<p class="aide">À réserver aux vraies grosses bêtises : pour le quotidien, le bouton − suffit. ' +
+      'Tu pourras toujours l\'annuler avant la réunion.</p>' +
+    "</div>" +
+    '<footer><button class="btn ghost" id="gcancel">Annuler</button>' +
+    '<button class="btn danger" id="gok">Rayer du trophée</button></footer>',
+    function(root){
+      var ta = root.querySelector("#gnote");
+      root.querySelector("#gcancel").onclick = closeModal;
+      root.querySelector("#gok").onclick = function(){
+        var note = ta.value.trim();
+        if(note.length < 2){ ta.focus(); ta.style.borderColor = "var(--dang)"; return; }
+        var d = root.querySelector("#gwhen").value || todayISO();
+        var at = (d === todayISO()) ? nowISO() : d + "T20:00:00.000Z";
+        if(!S.weekStart) S.weekStart = nowISO();
+        var ev = { id: uid(), child: childId, delta: 0, note: note, at: at,
+                   week: S.weekStart, kind: "grosse", by: meEmail(), deleted: false };
+        S.events.push(ev);
+        closeModal();
+        touch();
+        toast(c.name + " est rayé du trophée cette semaine.", function(){
+          var t = S.events.filter(function(x){ return x.id === ev.id; })[0];
+          if(t){ t.deleted = true; touch(); }
+        });
+      };
+    }
+  );
+}
+
 function editEvent(id){
   var t = S.events.filter(function(x){ return x.id === id; })[0];
   if(!t) return;
-  var list = t.delta > 0 ? S.presets.good : S.presets.bad;
+  var gros = t.kind === "grosse";
+  var list = gros ? [] : (t.delta > 0 ? S.presets.good : S.presets.bad);
   openModal(
     '<header><h3>Modifier — ' + esc(nameOf(t.child)) + '</h3>' +
-    '<p>Corrige l\'explication, la date, ou transforme un + en − et inversement.</p></header>' +
+    "<p>" + (gros
+      ? "Grosse bêtise : elle ne vaut aucun point, il n'y a donc pas de sens à changer. Pour l'annuler, utilise « supprimer »."
+      : "Corrige l'explication, la date, ou transforme un + en − et inversement.") + "</p></header>" +
     '<div class="content">' +
+      (gros ? "" :
       '<div class="field"><label>Sens</label><div class="choices" style="margin-top:0">' +
       '<button class="choice" data-sens="1" aria-pressed="' + (t.delta > 0) + '"><b>+ Bonne action</b></button>' +
       '<button class="choice" data-sens="-1" aria-pressed="' + (t.delta < 0) + '"><b>− Bêtise</b></button>' +
-      "</div></div>" +
+      "</div></div>") +
       '<div class="field"><label for="enote">Explication</label>' +
       '<textarea class="input" id="enote" data-autofocus>' + esc(t.note) + "</textarea></div>" +
       '<div class="presets">' + list.map(function(x){ return '<button type="button" class="preset">' + esc(x) + "</button>"; }).join("") + "</div>" +
@@ -2852,7 +2949,7 @@ function editEvent(id){
         var cur = S.events.filter(function(x){ return x.id === id; })[0];
         if(!cur) return;
         cur.note = note;
-        cur.delta = sens;
+        if(!gros) cur.delta = sens;   // une grosse bêtise reste à zéro point
         cur.by = auteur;
         if(d !== dateOnly(cur.at)) cur.at = (d === todayISO()) ? nowISO() : d + "T20:00:00.000Z";
         cur.modifiedBy = meEmail();
@@ -3237,7 +3334,7 @@ function railMarker(n){
 }
 function cardHTML(c){
   var n = scoreOf(c.id);
-  var v = verdictLabel(n);
+  var v = verdictLabel(n, c.id);
   var cg = cagnotteOf(c.id);
   var pw = palierInfo(n);   // progression des POINTS de la semaine, pas du porte-monnaie
   var sanc = activeSanctions(c.id);
@@ -3255,7 +3352,16 @@ function cardHTML(c){
        '<div class="marker" style="left:' + railMarker(n) + '%"></div>' +
        '<div class="railticks"><span>−5 sanction</span><span>−3 alerte</span><span>0</span><span>+5</span></div></div>';
   h += '<div class="sub">';
-  if(n > 0){
+  var gb = grosseDeLaSemaine(c.id);
+  if(gb && estRaye(c.id)){
+    h += '<div class="chip raye"><span aria-hidden="true">❗</span><span><b>Rayé du trophée</b> · ' +
+         esc(gb.note) + '<br><i>Encore ' + pointsPourRachat(c.id) + ' pt' +
+         (pointsPourRachat(c.id) > 1 ? "s" : "") + ' pour se racheter (+' + seuilRachat() + ').</i></span></div>';
+  } else if(gb){
+    h += '<div class="chip rachete"><span aria-hidden="true">🏆</span><span><b>Racheté</b> · ' +
+         'la grosse bêtise est effacée par ses +' + seuilRachat() + ' points.</span></div>';
+  }
+  if(n > 0 && !estRaye(c.id)){
     h += '<div class="chip"><span aria-hidden="true">🎁</span><span>Vaut <b>' + fMontant(pw.euros) + '</b>' +
          (S.cadeauPossible ? " — cadeau ou " + esc(nomCagnotte().toLowerCase()) : "") + ' · encore ' +
          pw.missing + ' pt' + (pw.missing > 1 ? "s" : "") + ' pour ' + fMontant(pw.next) + '</span></div>';
@@ -3281,6 +3387,8 @@ function cardHTML(c){
   }
   if(!readOnly){
     h += '<div class="actions">' +
+         '<button class="bigbtn btn-grosse" data-act="grosse" data-id="' + c.id + '" ' +
+         'title="Grosse bêtise : raye du trophée pour la semaine" aria-label="Grosse bêtise pour ' + esc(c.name) + '">!</button>' +
          '<button class="bigbtn btn-minus" data-act="minus" data-id="' + c.id + '"><span>−</span> Bêtise</button>' +
          '<button class="bigbtn btn-plus" data-act="plus" data-id="' + c.id + '"><span>+</span> Bonne action</button></div>';
   } else {
@@ -3311,11 +3419,13 @@ function viewHome(){
   } else {
     h += feed.map(function(e){
       var neuf = isNew(e);
-      return '<div class="feedrow ' + laneOf(e.child) + (neuf ? " neuf" : "") + '"><div class="delta ' + (e.delta > 0 ? "p" : "m") + '">' + (e.delta > 0 ? "+1" : "−1") + "</div>" +
+      var gros = e.kind === "grosse";
+      var marque = gros ? "❗" : (e.delta > 0 ? "+1" : "−1");
+      return '<div class="feedrow ' + laneOf(e.child) + (neuf ? " neuf" : "") + '"><div class="delta ' + (gros || e.delta < 0 ? "m" : "p") + '">' + marque + "</div>" +
              '<div class="body">' +
                '<div class="when"><b>' + esc(nameOf(e.child)) + "</b> · " + fWhen(e.at) +
                (neuf ? '<span class="tagneuf">nouveau</span>' : "") + "</div>" +
-               '<div class="note">' + (e.delta > 0 ? "+1" : "−1") + " — " + esc(e.note) +
+               '<div class="note">' + (gros ? "Grosse bêtise" : marque) + " — " + esc(e.note) +
                (e.by ? ' <span class="par">par ' + esc(whoName(e.by)) + "</span>" : "") + "</div>" +
              "</div>" +
              (readOnly ? "" :
@@ -3384,6 +3494,9 @@ function joursDeLaSemaine(childId){
   evs.forEach(function(e){
     var k = String(e.at).slice(0,10), j = parCle[k];
     if(!j) return;
+    // La grosse bêtise ne vaut aucun point : elle ne doit ni bouger les barres
+    // ni gonfler le compteur des bêtises.
+    if(e.kind === "grosse") return;
     j.solde += e.delta;
     if(e.delta > 0) j.plus++; else j.moins++;
   });
@@ -3502,112 +3615,45 @@ function graphiqueSemaine(childId){
     "</div></div>";
 }
 
-/* ====================== LE BILAN DU JOUR ======================
-   Une carte par journée, que l'on fait défiler : vers la gauche pour avancer
-   dans la semaine, vers la droite pour revenir en arrière. Pendant la réunion,
-   on relit la semaine jour après jour au lieu d'une longue liste. */
-var jourVu = {};   // pour chaque enfant, l'index du jour affiché
+/* ====================== LE TABLEAU DE LA RÉUNION ======================
+   Toute la semaine d'un coup : les bonnes actions à gauche, les bêtises à
+   droite. On relit sans faire défiler, et chacun voit d'où vient son total. */
+function tableauSemaine(childId){
+  var evs = eventsOfWeek(S.weekStart, childId).slice().reverse();   // du plus ancien au plus récent
+  var plus  = evs.filter(function(e){ return e.delta > 0; });
+  var moins = evs.filter(function(e){ return e.delta < 0 || e.kind === "grosse"; });
 
-function jourIndex(childId, jours){
-  var i = jourVu[childId];
-  if(typeof i !== "number" || i < 0 || i >= jours.length) i = jours.length - 1;   // aujourd'hui par défaut
-  return i;
-}
-
-function lignesDuJour(childId, cle){
-  return eventsOfWeek(S.weekStart, childId)
-    .filter(function(e){ return String(e.at).slice(0, 10) === cle; })
-    .slice().reverse();                                  // les plus anciennes en haut
-}
-
-function contenuJour(childId, jours, i){
-  var j = jours[i];
-  var lignes = lignesDuJour(childId, j.cle);
-  var cls = j.solde > 0 ? "p" : j.solde < 0 ? "m" : "z";
-  var mot = Math.abs(j.solde) > 1 ? "points" : "point";
-
-  var h = '<div class="jour-nav">' +
-    '<button class="jour-fl" type="button" data-jour="prec"' + (i === 0 ? " disabled" : "") +
-      ' aria-label="Jour précédent">&#8249;</button>' +
-    '<div class="jour-titre"><div class="eyebrow">Bilan du jour</div><b>' +
-      esc(JOURS[j.d.getDay()] + " " + fDate(j.cle)) + "</b></div>" +
-    '<button class="jour-fl" type="button" data-jour="suiv"' + (i === jours.length - 1 ? " disabled" : "") +
-      ' aria-label="Jour suivant">&#8250;</button>' +
-    "</div>";
-
-  h += '<div class="jour-carte">' +
-       '<div class="jour-solde ' + cls + '">' + (j.solde > 0 ? "+" : "") + j.solde + " " + mot + "</div>";
-  if(!lignes.length){
-    h += '<p class="jour-rien">Rien ce jour-là.</p>';
-  } else {
-    h += '<ul class="jour-lignes">';
-    lignes.forEach(function(e){
-      var d = new Date(e.at);
-      var heure = isNaN(d) ? "" : pad(d.getHours()) + "h" + pad(d.getMinutes());
-      h += '<li class="' + (e.delta > 0 ? "p" : "m") + '"><b>' + (e.delta > 0 ? "+1" : "&#8722;1") + "</b>" +
-           "<span>" + esc(e.note) +
-           (heure ? ' <span class="par">' + heure + "</span>" : "") +
-           (e.by ? ' <span class="par">· ' + esc(whoName(e.by)) + "</span>" : "") +
-           "</span></li>";
-    });
-    h += "</ul>";
+  function ligne(e){
+    var d = new Date(e.at);
+    var jour = isNaN(d) ? "" : JOURS_COURTS[d.getDay()] + " " + d.getDate();
+    var heure = isNaN(d) ? "" : pad(d.getHours()) + "h" + pad(d.getMinutes());
+    return '<li' + (e.kind === "grosse" ? ' class="grosse"' : "") +
+           ' title="' + esc(fWhen(e.at)) + '">' +
+           '<span class="bil-j">' + esc(jour) + " · " + heure +
+           (e.by ? ' · <span class="bil-qui">' + esc(whoName(e.by)) + "</span>" : "") + "</span>" +
+           (e.kind === "grosse" ? '<span aria-hidden="true">❗ </span>' : "") + esc(e.note) + "</li>";
   }
-  h += "</div>";
+  function colonne(cls, titre, lignes, total){
+    return '<div class="bil-col ' + cls + '">' +
+           '<div class="bil-tete"><span>' + titre + "</span><b>" + total + "</b></div>" +
+           (lignes.length
+             ? '<ul class="bil-liste">' + lignes.map(ligne).join("") + "</ul>"
+             : '<p class="bil-vide">Rien cette semaine.</p>') +
+           "</div>";
+  }
 
-  h += '<div class="jour-pts" aria-hidden="true">' +
-       jours.map(function(_, k){ return '<i class="' + (k === i ? "on" : "") + '"></i>'; }).join("") + "</div>";
-  h += '<p class="jour-aide">Glisse vers la gauche pour le jour suivant, vers la droite pour le précédent.</p>';
-  return h;
+  var tPlus  = plus.reduce(function(t, e){ return t + e.delta; }, 0);
+  var tMoins = moins.reduce(function(t, e){ return t + e.delta; }, 0);
+
+  return '<div class="bilan2">' +
+    colonne("p", "Bonnes actions", plus,  "+" + tPlus) +
+    colonne("m", "Bêtises",        moins, tMoins ? "−" + Math.abs(tMoins) : "0") +
+    "</div>";
 }
 
-function blocJour(childId){
-  var jours = joursDeLaSemaine(childId);
-  if(!jours) return '<div class="empty">Aucun mouvement cette semaine.</div>';
-  return '<div class="jourbloc" data-jourbloc="' + esc(childId) + '" tabindex="0">' +
-         contenuJour(childId, jours, jourIndex(childId, jours)) + "</div>";
-}
 
-function deplacerJour(bloc, childId, pas){
-  var jours = joursDeLaSemaine(childId);
-  if(!jours) return;
-  var i = jourIndex(childId, jours) + pas;
-  if(i < 0 || i >= jours.length) return;
-  jourVu[childId] = i;
-  bloc.innerHTML = contenuJour(childId, jours, i);
-  brancherFlechesJour(bloc, childId);
-}
 
-function brancherFlechesJour(bloc, childId){
-  bloc.querySelectorAll("[data-jour]").forEach(function(b){
-    b.onclick = function(){ deplacerJour(bloc, childId, b.getAttribute("data-jour") === "suiv" ? 1 : -1); };
-  });
-}
 
-function brancherJourbloc(bloc){
-  var childId = bloc.getAttribute("data-jourbloc");
-  brancherFlechesJour(bloc, childId);
-
-  var x0 = null, y0 = null;
-  bloc.addEventListener("touchstart", function(e){
-    if(e.touches.length !== 1){ x0 = null; return; }
-    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
-  }, { passive:true });
-  bloc.addEventListener("touchend", function(e){
-    if(x0 === null) return;
-    var t = e.changedTouches[0];
-    var dx = t.clientX - x0, dy = t.clientY - y0;
-    x0 = null;
-    // Un geste presque vertical, c'est la page que l'on fait défiler : on ne
-    // change pas de jour pour autant.
-    if(Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
-    deplacerJour(bloc, childId, dx < 0 ? 1 : -1);
-  }, { passive:true });
-
-  bloc.onkeydown = function(e){
-    if(e.key === "ArrowRight"){ e.preventDefault(); deplacerJour(bloc, childId, 1); }
-    else if(e.key === "ArrowLeft"){ e.preventDefault(); deplacerJour(bloc, childId, -1); }
-  };
-}
 
 function viewMeeting(){
 
@@ -3625,7 +3671,7 @@ function viewMeeting(){
     var ch = d.choices[c.id];
     var ax = axeOf(c.id);
     var tot = totalCompte(n, ch.axisDone === true);
-    var v = verdictLabel(n);
+    var v = verdictLabel(n, c.id);
     var zcls = zoneOf(n) === "good" ? "z-good" : zoneOf(n) === "warn" ? "z-warn" : zoneOf(n) === "bad" ? "z-bad" : "";
     h += '<section class="meet-child ' + laneOf(c.id) + '">';
     h += '<div class="meet-head"><div class="avatar">' + esc(c.name.charAt(0)) + "</div>" +
@@ -3636,7 +3682,7 @@ function viewMeeting(){
 
     h += graphiqueSemaine(c.id);
 
-    h += blocJour(c.id);
+    h += tableauSemaine(c.id);
 
     if(!readOnly){
       h += '<div class="choicebox"><div class="eyebrow">Axe d\'amélioration</div>';
@@ -3665,10 +3711,26 @@ function viewMeeting(){
            }).join("") + "</div></div>";
     }
 
-    if(n > 0){
+    var gb = grosseDeLaSemaine(c.id);
+
+    if(gb && estRaye(c.id)){
+      // Hors course : aucun choix à faire, et il faut que ce soit dit clairement
+      // devant tout le monde, avec le motif et le seuil qui aurait sauvé la mise.
+      h += '<div class="choicebox"><div class="eyebrow">Pas de trophée pour ' + esc(c.name) + '</div>' +
+           '<p class="meet-raye"><b><span aria-hidden="true">❗</span> Grosse bêtise le ' +
+           esc(fDate(gb.at)) + ' : ' + esc(gb.note) + '</b><br>' +
+           esc(c.name) + ' est rayé du trophée pour cette semaine. Il aurait fallu atteindre +' +
+           seuilRachat() + ' points pour se racheter ; la semaine se termine à ' + sgn(n) + '.</p>' +
+           "</div>";
+    } else if(n > 0){
       var cagAct = cagnotteOf(c.id);
       var gain = euroValue(tot);
       h += '<div class="choicebox"><div class="eyebrow">Choix de ' + esc(c.name) + '</div>';
+      if(gb){
+        h += '<p class="meet-rachete"><b><span aria-hidden="true">🏆</span> Racheté.</b> ' +
+             'La grosse bêtise du ' + esc(fDate(gb.at)) + ' aurait rayé ' + esc(c.name) +
+             ' du trophée, mais ses ' + sgn(n) + ' points l\'effacent (seuil : +' + seuilRachat() + ').</p>';
+      }
       if(estAvance(cagAct)){
         var apresGain = cagAct + gain;
         h += '<p class="meet-avance"><b>' + esc(c.name) + ' a une avance de ' + fAvance(cagAct) + '.</b> ' +
@@ -4008,7 +4070,10 @@ function viewSettings(){
        '<div class="row2"><div class="field"><label for="tw">Zone orange à partir de</label><input class="input mono" type="number" id="tw" value="' + S.thresholds.warn + '" max="0"></div>' +
        '<div class="field"><label for="tp">Sanction à partir de</label><input class="input mono" type="number" id="tp" value="' + S.thresholds.punish + '" max="0"></div>' +
        '<div class="field"><label for="pal">Palier (points)</label><input class="input mono" type="number" id="pal" value="' + S.palier + '" min="1"></div>' +
-       '<div class="field"><label for="palv">Vaut (' + esc(U()) + ')</label><input class="input mono" type="number" id="palv" value="' + S.palierValue + '" min="1"></div></div>' +
+       '<div class="field"><label for="palv">Vaut (' + esc(U()) + ')</label><input class="input mono" type="number" id="palv" value="' + S.palierValue + '" min="1"></div>' +
+       '<div class="field"><label for="rach">Se racheter à partir de</label><input class="input mono" type="number" id="rach" value="' + seuilRachat() + '" min="1"></div></div>' +
+       '<p style="font-size:.85rem;color:var(--ink-2);margin:10px 0 0">Une <b>grosse bêtise</b> raye du trophée ' +
+       'sans retirer de point. Atteindre <b>+' + seuilRachat() + '</b> avant la réunion l\'efface.</p>' +
        '<p style="font-size:.85rem;color:var(--ink-2);margin:10px 0 0">Aujourd\'hui : une semaine positive vaut ' +
        fMontant(S.palierValue) + ', et chaque palier de ' + S.palier + ' points complet ajoute ' +
        fMontant(S.palierValue) + '. Soit ' + [1, S.palier, S.palier * 2, S.palier * 3].map(function(n){
@@ -4174,8 +4239,9 @@ function wire(v){
   v.querySelectorAll("[data-act]").forEach(function(b){
     var id = b.getAttribute("data-id"), act = b.getAttribute("data-act");
     b.onclick = function(){
-      if(act === "plus")  addPoint(id, 1);
-      if(act === "minus") addPoint(id, -1);
+      if(act === "plus")   addPoint(id, 1);
+      if(act === "minus")  addPoint(id, -1);
+      if(act === "grosse") addGrosse(id);
       if(act === "hist"){ UI.child = id; go("history", id); }
     };
   });
@@ -4230,7 +4296,6 @@ function wire(v){
       touch();
     };
   });
-  v.querySelectorAll("[data-jourbloc]").forEach(brancherJourbloc);
   v.querySelectorAll("[data-nextaxe]").forEach(function(i){
     i.onchange = function(){ ensureDraft().choices[i.getAttribute("data-nextaxe")].nextAxis = i.value; persistLocal(); queueSave(); };
   });
@@ -4314,13 +4379,15 @@ function wire(v){
       warn:   parseInt(v.querySelector("#tw").value, 10),
       punish: parseInt(v.querySelector("#tp").value, 10),
       palier: parseInt(v.querySelector("#pal").value, 10),
-      valeur: parseInt(v.querySelector("#palv").value, 10)
+      valeur: parseInt(v.querySelector("#palv").value, 10),
+      rachat: parseInt(v.querySelector("#rach").value, 10)
     };
     var ok = await requirePin("Le code parent est demandé pour modifier les seuils.", true); if(!ok) return;
     S.thresholds.warn   = lu.warn   || -3;
     S.thresholds.punish = lu.punish || -5;
     S.palier            = lu.palier || 5;
     S.palierValue       = lu.valeur || 5;
+    S.rachat            = lu.rachat > 0 ? lu.rachat : 10;
     touch(); toast("Seuils enregistrés");
   };
   var sn = v.querySelector("#savename");
